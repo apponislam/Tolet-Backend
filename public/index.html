@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Server Template</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+        <style>
+            /* Reset & base styles */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: "Inter", sans-serif;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: #fff;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            header {
+                padding: 2rem;
+                text-align: center;
+                background: rgba(0, 0, 0, 0.2);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            }
+            header h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+            }
+            header p {
+                margin-top: 0.5rem;
+                font-size: 1.2rem;
+                color: #e0e0e0;
+            }
+            main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                text-align: center;
+            }
+            main h2 {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+            main p {
+                font-size: 1.1rem;
+                max-width: 600px;
+                line-height: 1.6;
+                color: #f0f0f0;
+            }
+            footer {
+                text-align: center;
+                padding: 1rem;
+                background: rgba(0, 0, 0, 0.2);
+                font-size: 0.9rem;
+            }
+            .btn {
+                display: inline-block;
+                margin-top: 1.5rem;
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                font-weight: 600;
+                color: #fff;
+                background: #ff6b6b;
+                border-radius: 8px;
+                text-decoration: none;
+                transition: background 0.3s ease;
+            }
+            .btn:hover {
+                background: #ff5252;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>🚀 Welcome to My Server</h1>
+            <p>Your backend is running smoothly!</p>
+        </header>
+        <main>
+            <h2>Server is Live</h2>
+            <p>This server template is ready to handle your API requests, file uploads, authentication, and more. Use this page as a friendly landing page to check that everything is running correctly.</p>
+            <a href="/api" class="btn">Go to API</a>
+        </main>
+        <footer>&copy; 2025 My Server. All rights reserved.</footer>
+        <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.8.1/dist/socket.io.min.js"></script>
+
+        <script>
+            const userId = "68c2150728ab5befa45047f7"; // replace with your actual user ID
+            const socket = io("http://localhost:5000");
+
+            socket.on("connect", () => {
+                console.log("✅ Connected to Socket.IO server:", socket.id);
+
+                // Join personal room
+                socket.emit("joinRoom", userId);
+                console.log("📥 Joining room for user:", userId);
+
+                // Update location every 5 seconds
+                setInterval(() => {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                const latitude = position.coords.latitude;
+                                const longitude = position.coords.longitude;
+                                const speed = position.coords.speed ?? 0;
+                                const heading = position.coords.heading ?? 0;
+
+                                socket.emit("updateLocation", { userId, latitude, longitude, speed, heading });
+                                console.log("📡 Sent real location update:", { latitude, longitude, speed, heading });
+                            },
+                            (err) => {
+                                console.error("❌ Geolocation error:", err);
+                            }
+                        );
+                    } else {
+                        console.error("❌ Geolocation not supported by this browser.");
+                    }
+                }, 5000);
+            });
+
+            // Listen for all users' location updates
+            socket.on("locationUpdated", (data) => {
+                console.log("🌍 All users' locations:", data);
+            });
+
+            // Listen for distances from this user to all other users
+            socket.on("usersDistance", (distances) => {
+                console.log("📏 Distances from me to all other users:", distances);
+            });
+
+            socket.on("disconnect", () => {
+                console.log("❌ Disconnected from server");
+            });
+        </script>
+    </body>
+</html>

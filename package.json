@@ -1,0 +1,46 @@
+{
+    "name": "blood-donation-server",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "prod": "NODE_ENV=production node ./dist/server.js",
+        "start": "node ./dist/server.js",
+        "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+        "build": "tsc"
+    },
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.1",
+        "express": "^5.1.0",
+        "http-status": "^2.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.18.0",
+        "multer": "^2.0.2",
+        "nodemailer": "^7.0.6",
+        "passport": "^0.7.0",
+        "passport-facebook": "^3.0.0",
+        "passport-google-oauth20": "^2.0.0",
+        "socket.io": "^4.8.1",
+        "zod": "^4.1.5"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^6.0.0",
+        "@types/cookie-parser": "^1.4.9",
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/multer": "^2.0.0",
+        "@types/nodemailer": "^7.0.1",
+        "@types/passport": "^1.0.17",
+        "@types/passport-facebook": "^3.0.3",
+        "@types/passport-google-oauth20": "^2.0.16",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.9.2"
+    }
+}
